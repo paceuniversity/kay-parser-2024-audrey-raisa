@@ -47,10 +47,14 @@ public class TokenStream {
 		t.setType("Other"); // For now it is Other
 		t.setValue("");
 
-		
+
 		// First check for whitespaces and bypass them
 		skipWhiteSpace();
 
+		if (isEof) {
+			t.setType("EOF");
+        return t; 
+    	}
 		// Then check for a comment, and bypass it
 		// but remember that / may also be a division operator.
 		while (nextChar == '/') {
@@ -61,11 +65,16 @@ public class TokenStream {
 				// skip rest of line - it's a comment.
 				// TODO TO BE COMPLETED
 				// look for <cr>, <lf>, <ff>
-				while (!isEndOfLine(nextChar) && !isEof) {
+				while (nextChar != '\n' && nextChar != '\r' && !isEof) {
 					nextChar = readChar();
+
 				}
         		skipWhiteSpace();
-		
+				if (isEof) {
+			t.setType("EOF");
+        return t; 
+    	}
+
 			} else {
 				// A slash followed by anything else must be an operator.
 				t.setValue("/");
@@ -87,17 +96,19 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
+					return t;
 				} else {
 					t.setValue("<");
 				}
 				return t;
-				
+
 			case '>':
 				// >=
 				nextChar = readChar();
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
+					return t;
 				} else {
 					t.setValue(">");
 				}
@@ -108,6 +119,7 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
+					return t;
 				} else {
 					t.setType("Other");
 				}
@@ -118,6 +130,7 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
+					return t;
 				} else {
 					t.setValue("!");
 				}
@@ -128,6 +141,7 @@ public class TokenStream {
 				if (nextChar == '|') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
+					return t;
 				} else {
 					t.setType("Other");
 				}
@@ -139,6 +153,7 @@ public class TokenStream {
 				if (nextChar == '&') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
+					return t;
 				} else {
 					t.setType("Other");
 				}
@@ -150,9 +165,11 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
+					return t;
 				} else {
 					t.setType("Other");
 				}
+				return t;
 
 			default: // all other operators
 				nextChar = readChar();
@@ -180,7 +197,7 @@ public class TokenStream {
 			// now see if this is a keyword
 			if (isKeyword(t.getValue())) {
 				t.setType("Keyword");
-				
+				return t;
 			} else if (t.getValue().equals("True") || t.getValue().equals("False")) {
 				t.setType("Literal");
 			}
@@ -203,7 +220,7 @@ public class TokenStream {
 		}
 
 		t.setType("Other");
-		
+
 		if (isEof) {
 			return t;
 		}
@@ -213,7 +230,7 @@ public class TokenStream {
 			t.setValue(t.getValue() + nextChar);
 			nextChar = readChar();
 		}
-		
+
 		// Finally check for whitespaces and bypass them
 		skipWhiteSpace();
 
@@ -225,7 +242,7 @@ public class TokenStream {
 		if (isEof)
 			return (char) 0;
 		System.out.flush();
-		
+
 		try {
 			i = input.read();
 		} catch (IOException e) {
