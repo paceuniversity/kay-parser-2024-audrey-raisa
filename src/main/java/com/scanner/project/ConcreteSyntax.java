@@ -161,7 +161,7 @@ public class ConcreteSyntax {
 			token = input.nextToken();
 			match(":=");
 			a.source = expression();
-			match(";");
+			
 		} else
 			throw new RuntimeException(SyntaxError("Identifier"));
 		return a;
