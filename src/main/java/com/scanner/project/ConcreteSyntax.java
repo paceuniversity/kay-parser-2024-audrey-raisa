@@ -54,7 +54,10 @@ public class ConcreteSyntax {
 			match(header[i]);
 		p.decpart = declarations();
 		p.body = statements();
-		match("}");
+		 if (token == null || token.getType().equals("EOF")) {
+       throw new RuntimeException(SyntaxError("Expected '}' but saw EOF"));
+    }
+        match("}");
 		return p;
 	}
 
@@ -120,6 +123,9 @@ public class ConcreteSyntax {
 	private Statement statement() {
 		// Statement --> ; | Block | Assignment | IfStatement | WhileStatement
 		Statement s = new Skip();
+		  if (token.getType().equals("EOF")) {
+        throw new RuntimeException(SyntaxError("}"));
+    }
 		if (token.getValue().equals(";")) { // Skip
 			token = input.nextToken();
 			return s;

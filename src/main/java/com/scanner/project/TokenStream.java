@@ -52,7 +52,8 @@ public class TokenStream {
 		skipWhiteSpace();
 
 		if (isEof) {
-        return null; 
+			t.setType("EOF");
+        return t; 
     	}
 
 		// Then check for a comment, and bypass it
@@ -72,8 +73,9 @@ public class TokenStream {
         		skipWhiteSpace();
 
 				if (isEof) {
-					return null; 
-				}
+			t.setType("EOF");
+        return t; 
+    	}
 		
 			} else {
 				// A slash followed by anything else must be an operator.
