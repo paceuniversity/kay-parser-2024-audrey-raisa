@@ -1,4 +1,4 @@
-package com.scanner.project;
+//package com.scanner.project;
 // ConcreteSyntax.java
 
 // Implementation of the Recursive Descent Parser algorithm
@@ -47,17 +47,12 @@ public class ConcreteSyntax {
 	public Program program() {
 		// TODO TO BE COMPLETED 
 		// Program --> main '{' Declarations Statements '}'
-		String[] header = {"main", "{"};
 		Program p = new Program();
-		for (int i = 0; i < header.length; i++)
-			// bypass " main { "
-			match(header[i]);
+		match("main");
+		match("{");
 		p.decpart = declarations();
 		p.body = statements();
-		 if (token == null || token.getType().equals("EOF")) {
-       throw new RuntimeException(SyntaxError("Expected '}' but saw EOF"));
-    }
-        match("}");
+		match("}");
 		return p;
 	}
 
@@ -84,13 +79,14 @@ public class ConcreteSyntax {
 		// TODO TO BE COMPLETED
 		// Type --> integer | bool
 		Type t = null;
-		if (token.getValue().equals("integer") || token.getValue().equals("bool")) {
+		if (token.getValue().equals("integer"))
 			t = new Type(token.getValue());
-			token = input.nextToken(); // Consume the valid type token
-			return t;
-		}
+		else if (token.getValue().equals("bool"))
+			t = new Type(token.getValue());
 		else
 			throw new RuntimeException(SyntaxError("integer | bool"));
+		token = input.nextToken(); // pass over the type
+		return t;
 	}
 
 	private void identifiers(Declarations ds, Type t) {
@@ -121,9 +117,7 @@ public class ConcreteSyntax {
 	private Statement statement() {
 		// Statement --> ; | Block | Assignment | IfStatement | WhileStatement
 		Statement s = new Skip();
-		  if (token.getType().equals("EOF")) {
-        throw new RuntimeException(SyntaxError("}"));
-    }
+
 		if (token.getValue().equals(";")) { // Skip
 			token = input.nextToken();
 			return s;
@@ -149,7 +143,10 @@ public class ConcreteSyntax {
 		// Block --> '{' Statements '}'
 		Block b = new Block();
 		while (!token.getValue().equals("}")) {
-			b.blockmembers.addElement(statement());
+			Statement s = statement();
+			if (!(s instanceof Skip)) {
+				b.blockmembers.addElement(s);
+			}
 		}
 		return b;
 	}
@@ -312,7 +309,7 @@ public class ConcreteSyntax {
 		match(")");
 		c.thenbranch = statement();
 		if(token.getValue().equals("else")){
-			match("else");
+			token = input.nextToken();
 			c.elsebranch = statement();
 		}
 		
