@@ -51,11 +51,6 @@ public class TokenStream {
 		// First check for whitespaces and bypass them
 		skipWhiteSpace();
 
-		if (isEof) {
-			t.setType("EOF");
-        return t; 
-    	}
-
 		// Then check for a comment, and bypass it
 		// but remember that / may also be a division operator.
 		while (nextChar == '/') {
@@ -71,11 +66,6 @@ public class TokenStream {
 					
 				}
         		skipWhiteSpace();
-
-				if (isEof) {
-			t.setType("EOF");
-        return t; 
-    	}
 		
 			} else {
 				// A slash followed by anything else must be an operator.
