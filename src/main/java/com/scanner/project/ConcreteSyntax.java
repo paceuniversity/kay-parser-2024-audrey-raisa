@@ -61,14 +61,14 @@ public class ConcreteSyntax {
 	private Declarations declarations() {
 		// TODO TO BE COMPLETED 
 		// Declarations --> { Declaration }*
-		 Declarations ds = new Declarations();
-		while (token.getValue().equals("integer") || token.getValue().equals("bool")) {
-			declaration(ds); // Process valid declarations
-		}
-		// If there's an invalid token where a declaration is expected, throw an error
+		Declarations ds = new Declarations();
 		if (token.getType().equals("Identifier") || token.getValue().equals("string")) {
-			throw new RuntimeException(SyntaxError("integer | bool"));
+        throw new RuntimeException(SyntaxError("integer | bool"));
+    }
+		while (token.getValue().equals("integer") || token.getValue().equals("bool")) {
+			declaration(ds);  // Process valid declarations
 		}
+		// If an invalid token appears where a declaration is expected, throw an error
 		return ds;
 	}
 
