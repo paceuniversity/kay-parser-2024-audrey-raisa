@@ -61,10 +61,13 @@ public class ConcreteSyntax {
 	private Declarations declarations() {
 		// TODO TO BE COMPLETED 
 		// Declarations --> { Declaration }*
-		Declarations ds = new Declarations();
-		while (token.getValue().equals("integer")
-				|| token.getValue().equals("bool")) {
-			declaration(ds);
+		 Declarations ds = new Declarations();
+		while (token.getValue().equals("integer") || token.getValue().equals("bool")) {
+			declaration(ds); // Process valid declarations
+		}
+		// If there's an invalid token where a declaration is expected, throw an error
+		if (token.getType().equals("Identifier") || token.getValue().equals("string")) {
+			throw new RuntimeException(SyntaxError("integer | bool"));
 		}
 		return ds;
 	}
@@ -80,14 +83,13 @@ public class ConcreteSyntax {
 		// TODO TO BE COMPLETED
 		// Type --> integer | bool
 		Type t = null;
-		if (token.getValue().equals("integer"))
+		if (token.getValue().equals("integer") || token.getValue().equals("bool")) {
 			t = new Type(token.getValue());
-		else if (token.getValue().equals("bool"))
-			t = new Type(token.getValue());
+			token = input.nextToken(); // Consume the valid type token
+			return t;
+		}
 		else
 			throw new RuntimeException(SyntaxError("integer | bool"));
-		token = input.nextToken(); // pass over the type
-		return t;
 	}
 
 	private void identifiers(Declarations ds, Type t) {
