@@ -61,9 +61,8 @@ public class TokenStream {
 				// skip rest of line - it's a comment.
 				// TODO TO BE COMPLETED
 				// look for <cr>, <lf>, <ff>
-				while (nextChar != '\n' && nextChar != '\r' && !isEof) {
+				while (!isEndOfLine(nextChar) && !isEof) {
 					nextChar = readChar();
-					
 				}
         		skipWhiteSpace();
 		
@@ -88,7 +87,6 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
-					return t;
 				} else {
 					t.setValue("<");
 				}
@@ -100,7 +98,6 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
-					return t;
 				} else {
 					t.setValue(">");
 				}
@@ -111,7 +108,6 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
-					return t;
 				} else {
 					t.setType("Other");
 				}
@@ -122,7 +118,6 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
-					return t;
 				} else {
 					t.setValue("!");
 				}
@@ -133,7 +128,6 @@ public class TokenStream {
 				if (nextChar == '|') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
-					return t;
 				} else {
 					t.setType("Other");
 				}
@@ -145,7 +139,6 @@ public class TokenStream {
 				if (nextChar == '&') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
-					return t;
 				} else {
 					t.setType("Other");
 				}
@@ -157,11 +150,9 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 					nextChar = readChar();
-					return t;
 				} else {
 					t.setType("Other");
 				}
-				return t;
 
 			default: // all other operators
 				nextChar = readChar();
@@ -189,7 +180,7 @@ public class TokenStream {
 			// now see if this is a keyword
 			if (isKeyword(t.getValue())) {
 				t.setType("Keyword");
-				return t;
+				
 			} else if (t.getValue().equals("True") || t.getValue().equals("False")) {
 				t.setType("Literal");
 			}
