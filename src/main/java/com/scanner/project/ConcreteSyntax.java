@@ -65,9 +65,7 @@ public class ConcreteSyntax {
 		// TODO TO BE COMPLETED 
 		// Declarations --> { Declaration }*
 		Declarations ds = new Declarations();
-		if (token.getType().equals("Identifier") || token.getValue().equals("string")) {
-        throw new RuntimeException(SyntaxError("integer | bool"));
-    }
+		
 		while (token.getValue().equals("integer") || token.getValue().equals("bool")) {
 			declaration(ds);  // Process valid declarations
 		}
