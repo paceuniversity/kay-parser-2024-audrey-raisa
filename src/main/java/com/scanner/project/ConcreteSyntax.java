@@ -248,8 +248,8 @@ public class ConcreteSyntax {
 		while (token.getValue().equals("*") || token.getValue().equals("/")) {
 			b = new Binary();
 			// TODO TO BE COMPLETED
-			b.op = new Operator(token.getValue());
 			b.term1 = e;
+			b.op = new Operator(token.getValue());
 			token = input.nextToken();
 			b.term2 = negation();
 			e = b;
